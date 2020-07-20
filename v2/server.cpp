@@ -21,11 +21,19 @@ int main(){
     exit(EXIT_FAILURE);
   }
   if( setsockopt(sock_fd, SOL_SOCKET, SO_REUSEPORT, &enable, sizeof(int)) < 0){
-    perror("socket option failed");
+    perror("socket SO_REUSEPORT option failed");
     exit(EXIT_FAILURE);
   }
   if( setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0){
-    perror("socket option failed");
+    perror("socket SO_REUSEADDR option failed");
+    exit(EXIT_FAILURE);
+  }
+
+  struct linger sl;
+  sl.l_onoff = 1; // Non-zero value enables linger option in kernel
+  sl.l_linger = 0;  // timeout interval in seconds
+  if( setsockopt(sock_fd, SOL_SOCKET, SO_LINGER, &sl, sizeof(sl)) < 0){
+    perror("Error linger");
     exit(EXIT_FAILURE);
   }
 
@@ -68,7 +76,7 @@ int main(){
     inet_ntop(AF_INET, &client_addr.sin_addr, client_ip, 256);  
     printf("Msg received from %s : %s", client_ip, buffer);
   
-  }
+  printf("Closing socket");
   
   // Close socket 
   // Actually destroy a socket
@@ -81,6 +89,7 @@ int main(){
   // SHUT_RDWR - disable further send and receive operations
   shutdown(sock_fd, SHUT_RDWR);
 
+  }
 
   return 0;  
 }
