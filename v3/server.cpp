@@ -18,6 +18,11 @@ int main(){
   int enable = 1;
 
   // Start socket
+  // Create an unbound socket in the specified domain
+  // int socket(int domain, int type, int protocol)
+  // domain - specifies the communication domain (AF_INET for IPv4 || AF_INET6 for IPv6)
+  // type - type of socket to be created (SOCK_STREAM for TCP || SOCK_DGRAM for UDP)
+  // protocol - protocol to be used by socket (0 means default protocol for the address family)
   if( (sock_fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0){
     perror("socket creation failed");
     exit(EXIT_FAILURE);
@@ -56,6 +61,12 @@ int main(){
   // gets handled to the socket)
   // reinterpret_cast<> intended for low level casts that yield implelentation-dependent
   // (i.e unportable) results e.g. casting a pointer to an int 
+  // ===========================
+  // Assigns address to the unbound socket
+  // int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
+  // sockdf - file descriptor of socket to be binded
+  // addr - structure in which address to be binded to is specified
+  // addrlen - size of addr structure
   if( bind(sock_fd, reinterpret_cast<const struct sockaddr *>(&server_addr), sizeof(server_addr)) < 0 ){
     perror("bind failed");
     exit(EXIT_FAILURE);
@@ -74,13 +85,24 @@ int main(){
     memset(&client_addr, 0, client_length);
     memset(&buffer, 0, constants::kMaxBytesMsg);
     
-    // Wait for message
+    // Wait for  message
+    // size_t recvfrom(int sockfd, void *buf, size_t len, int flags, struct sockaddr *src_addr, socklen_t *addrlen)
+    // Receive a message from the socket
+    // sockfd - file descriptor of socket
+    // buf - application buffer in which to receive data
+    // len - size of buf application buffer
+    // flags - bitwise or of flags to modify socket behaviour
+    // src_addr - structure containing source address is returned
+    // addrlen - variable in which size of src_addr structure is returned
     int bytes_in = recvfrom(sock_fd, buffer, constants::kMaxBytesMsg, MSG_WAITALL, reinterpret_cast<struct sockaddr *>(&client_addr), &client_length);
     if(bytes_in == -1){
       printf("Error receiving from client");
       continue;
     }
 
+    // legacy, end buffer probably handled by memset(zero)
+    //buffer[bytes_in] = '\0';
+    
     // Display message and client info
     char client_ip[256];
     memset(&client_ip, 0, 256);
