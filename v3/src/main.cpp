@@ -1,6 +1,7 @@
 #include <iostream>
 #include <thread>   // std::thread
 #include <string>
+#include <future>
 
 #include <chrono>
 
@@ -13,9 +14,12 @@
 #include <cstring>
 
 
-void ListenConnections(){
-  std::this_thread::sleep_for(std::chrono::seconds(10));
-  std::cout << "Wake!\n";
+void ListenConnections(std::future<void> future_obj){
+  while(future_obj.wait_for(std::chrono::milliseconds(1)) == std::future_status::timeout){
+    std::cout << "Active thread\n";
+  }
+  //std::this_thread::sleep_for(std::chrono::seconds(10));
+  //std::cout << "Wake!\n";
 }
 
 bool GetUserInterruption(){
@@ -115,14 +119,29 @@ int main(){
 
   // End non-blocking socket
 
-  std::thread listenConnections(ListenConnections);  // spawn new thread that calls ListenConnections();
-  std::thread getUserInterruption(GetUserInterruption);  // spawn new thread that calls GetUserInterruption()
+  // We can pass a std::future<void> object to thread and thread should exit when 
+  // value in future is available.
+  // As, we want only to signal the thread and not actually passing any value in that signal 
+  // we can use future object of type void 
+  
+  // Create a std::promise object 
+  std::promise<void> exit_signal;
+
+  // Fetch the associated future object from this promise
+  std::future<void> future_obj = exit_signal.get_future();
+
+  std::thread listenConnections(&ListenConnections, std::move(future_obj));  // spawn new thread that calls ListenConnections(); send future_obj as argument
+  std::thread getUserInterruption(&GetUserInterruption);  // spawn new thread that calls GetUserInterruption()
 
   std::cout << "main, 1, and 2 now execute concurrently..\n";
 
   // synchronize threads
-  listenConnections.join();   // Pauses until ListenConnections finishes
   getUserInterruption.join(); // Pauses until GetUserInterruption finishes
+  std::cout << "user interruption!\n";
+  exit_signal.set_value();
+
+  listenConnections.join();   // Pauses until ListenConnections finishes
+
 
   std::cout << "1 and 2 completed\n";
 
