@@ -14,28 +14,12 @@
 #include <cstring>
 
 
+void Call(){
+  std::cout << "Received: ZZ\n";
+}
+
 void ListenConnections(std::future<void> future_obj){
-  while(future_obj.wait_for(std::chrono::milliseconds(1)) == std::future_status::timeout){
-    std::cout << "Active thread\n";
-  }
-  //std::this_thread::sleep_for(std::chrono::seconds(10));
-  //std::cout << "Wake!\n";
-}
 
-bool GetUserInterruption(){
-  std::string input;
-  while(true){
-    std::cout << "Press q to quit: ";
-    std::getline(std::cin, input);
-    if(input == "q"){
-      return true;
-    }
-  }
-}
-
-int main(){
-
-  // Non-blocking socket
   int sock_fd;
   int enable = 1;
   if( (sock_fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0){
@@ -84,9 +68,7 @@ int main(){
   char buffer[1024];
 
   printf("Litening connections on port 8080\n");
-  printf("1");
   memset(&buffer, 0, 1024);
-  printf("2");
 
   /*
   fd_set s;
@@ -103,19 +85,43 @@ int main(){
     printf("timeout");
   }
   
-  if(retval > 0){
-    printf("case 2");
+  */
+  while(future_obj.wait_for(std::chrono::milliseconds(1)) == std::future_status::timeout){
+  
+    /*if(retval > 0){
+      printf("case 2");
     */
     int bytes_in = recvfrom(sock_fd, buffer, 1024, MSG_WAITALL, reinterpret_cast<struct sockaddr *>(&client_addr), &client_length);
+    
     if(bytes_in == -1){
       printf("Error receiving from client");
+    }else{
+      Call();
     }
   //}
 
-
+  }
 
   close(sock_fd);
   shutdown(sock_fd, SHUT_RDWR);
+
+
+}
+
+bool GetUserInterruption(){
+  std::string input;
+  while(true){
+    std::cout << "Press q to quit: ";
+    std::getline(std::cin, input);
+    if(input == "q"){
+      return true;
+    }
+  }
+}
+
+int main(){
+
+  // Non-blocking socket
 
   // End non-blocking socket
 
