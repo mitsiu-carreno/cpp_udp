@@ -1,1 +1,7 @@
 *.swp
+*.o
+bin/*
+!bin/.gitkeep
+build/*
+build/.gitkeep
+.DS_Store

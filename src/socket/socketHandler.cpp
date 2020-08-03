@@ -1,8 +1,9 @@
 #include "socketHandler.hpp"
 #include "constants.hpp"
+#include "thread.hpp"
 #include <future>
 #include <iostream>
-
+#include <string>
 
 #include <stdio.h>  // perror definition
 #include <stdlib.h> // EXIT_FAILURE definition and htons functions
@@ -111,7 +112,7 @@ namespace sockethandler{
     socklen_t client_length = sizeof(client_addr);
     char buffer [constants::kMaxBytesMsg];
 
-    printf("Listening connections on port %d\n", constants::kPort);
+    thread::PrintSafe("Listening connections on port " + std::to_string(constants::kPort) + "\n");
 
     // Enter loop
     while(future_obj.wait_for(std::chrono::milliseconds(1)) == std::future_status::timeout){
@@ -131,7 +132,7 @@ namespace sockethandler{
       // addrlen - variable in which size of src_addr structure is returned
       int bytes_in = recvfrom(sock_fd, buffer, constants::kMaxBytesMsg, MSG_WAITALL, reinterpret_cast<struct sockaddr *>(&client_addr), &client_length);
       if(bytes_in == -1){
-        printf("Error receiving from client");
+        thread::PrintSafe("Error receiving from client\n");
         continue;
       }
 
@@ -145,11 +146,11 @@ namespace sockethandler{
       // ntop = number to pointer to string     // pton = pointer to string to number
       // client_addr.sin_addr store ip address as bytes, we turn it into a string "127.0.0.1"
       inet_ntop(AF_INET, &client_addr.sin_addr, client_ip, 256);  
-      printf("Msg received from %s : %s", client_ip, buffer);
+      thread::PrintSafe("Msg received from " + std::string(client_ip) + ":" + std::string(buffer) + "\n");
 
     }   
   
-    printf("Closing socket");
+    thread::PrintSafe("Closing socket\n");
   
     // Close socket 
     // Actually destroy a socket
