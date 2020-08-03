@@ -1,9 +1,9 @@
-#ifndef SOCKET_H
-#define SOCKET_H
+#ifndef SOCKETHANDLER_H
+#define SOCKETHANDLER_H
 
 #include <future>
 
-namespace socket{
+namespace sockethandler{
   void ListenConnections(std::future<void> future_obj);
 }
 

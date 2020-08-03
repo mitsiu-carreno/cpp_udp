@@ -2,7 +2,7 @@
 #define INTERRUPT_H
 
 namespace utils{
-  void GetUserInterruption();
+  bool GetUserInterruption();
 }
 
 #endif

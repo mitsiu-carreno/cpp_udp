@@ -1,6 +1,6 @@
 #include "thread.hpp"
 #include "interrupt.hpp"
-#include "socket.hpp"
+#include "socketHandler.hpp"
 #include <thread>
 #include <future>
 
@@ -20,11 +20,12 @@ namespace thread{
    // Fetch the associated future object from this promise
     std::future<void> future_obj = exit_signal.get_future();
 
-   // Create a new thread that calls ListenConnections() and send future_obj as argument
-    std::thread listen_connections_thread(&socket::ListenConnections, std::move(future_obj));
 
    // Create a new thread that calls GetUserInterrumption()
     std::thread get_user_interruption_thread(&utils::GetUserInterruption);
+
+   // Create a new thread that calls ListenConnections() and send future_obj as argument
+    std::thread listen_connections_thread(&sockethandler::ListenConnections, std::move(future_obj));
 
   // Both threads are executing concurrently
   
