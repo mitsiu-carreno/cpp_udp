@@ -18,8 +18,24 @@ void Continue(){
 }
 
 int main(int argc, char* argv[]){
-  const char server_address[] = {"127.0.0.1"};
-  int port = 8080;
+  // argv[0] is program name
+  if(argv[1] == NULL){
+    printf("Agregue un string con la dirección del servidor ejemplo ./client/client \"192.168.100.12\" \"8080\" \"Hello kitty\"");
+    exit(EXIT_FAILURE);
+  }
+  if(argv[2] == NULL){
+    printf("Agregue un string con el puerto al que se desea acceder ejemplo ./client/client \"192.168.100.12\" \"8080\" \"Hello kitty\"");
+    exit(EXIT_FAILURE);
+  }
+  if(argv[3] == NULL){
+    printf("Agregue un string con el mensaje que desea enviar ejemplo ./client/client \"192.168.100.12\" \"8080\" \"Hello kitty\"");
+    exit(EXIT_FAILURE);
+  }
+  //char server_address[] = {argv[1]};
+  char * server_address = argv[1];
+  int port {std::stoi(argv[2])};
+
+  std::string s = argv[3];
   //int max_bytes_msg = 1024;
 
   // Start socket
@@ -48,13 +64,7 @@ int main(int argc, char* argv[]){
   }
   */
 
-  // Write out to that socket
-  // argv[0] name of program
-  if(argv[1] == NULL){
-    printf("Agregue un string como argumento ejemplo: ./client \"Hello kitty\"\n");
-    exit(EXIT_FAILURE);
-  }
-  std::string s = argv[1];
+
   
   Continue();
   
