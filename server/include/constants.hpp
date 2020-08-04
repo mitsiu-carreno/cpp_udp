@@ -3,7 +3,7 @@
 
 namespace constants{
   int kPort {8080};
-  int kMaxBytesMsg {1024};
+  int kMaxBytesMsg {2048};
 }
 
 #endif

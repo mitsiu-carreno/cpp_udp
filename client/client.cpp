@@ -7,11 +7,20 @@
 //#include <netinet/in.h>
 #include <cstring>  // memset definition
 #include <string>
+#include <iostream>
+
+void Continue(){
+  std::string input;
+  printf("Press enter to send message: ");
+  // Flush cin
+  std::cin.ignore(32767, '\n');
+
+}
 
 int main(int argc, char* argv[]){
   const char server_address[] = {"127.0.0.1"};
   int port = 8080;
-  int max_bytes_msg = 1024;
+  //int max_bytes_msg = 1024;
 
   // Start socket
   int sock_fd;
@@ -47,7 +56,7 @@ int main(int argc, char* argv[]){
   }
   std::string s = argv[1];
   
-
+  Continue();
   
   // s.size()+1 cause we want to store the \0 at the end of the string
   // ==========================

@@ -9,9 +9,12 @@ else
 endif
 
 # Project structure
-SRC_DIR 	:= src
-BUILD_TARGET := build
-EXEC_TARGET	:= bin
+CLIENT_DIR := client
+SERVER_DIR := server
+
+SRC_DIR 	:= $(SERVER_DIR)/src
+BUILD_TARGET := $(SERVER_DIR)/build
+EXEC_TARGET	:= $(SERVER_DIR)/bin
 
 # Executable 
 EXEC_TARGET_NAME := udp_sockets
@@ -32,12 +35,13 @@ BUILD_DIRECTORY_LIST := $(sort $(BUILD_DIRECTORY_LIST))
 
 
 # Find all the directories containing .hpp and .h files
-HEADER_DIRECTORY_LIST	:= $(shell find include \( -name '*.hpp' -o -name '*.h' \) -exec dirname {} \; | sort | uniq)
+HEADER_DIRECTORY_LIST	:= $(shell find $(SERVER_DIR)/include \( -name '*.hpp' -o -name '*.h' \) -exec dirname {} \; | sort | uniq)
 # Prefix -I to all directories containing .hpp and .h files
-INCLUDE_LIST 	:= $(patsubst include%,-I include%,$(HEADER_DIRECTORY_LIST))
+INCLUDE_LIST 	:= $(patsubst $(SERVER_DIR)/include%,-I $(SERVER_DIR)/include%,$(HEADER_DIRECTORY_LIST))
 
 
 CFLAGS=-c -std=c++1z -Wall -Werror -g
+CLIENT_FLAGS= -std=c++1z -Wall -Werror -g
 
 $(EXEC_TARGET): $(O_FILE_FULL_PATH_LIST)
 	@mkdir -p $(EXEC_TARGET)
@@ -55,6 +59,13 @@ $(BUILD_TARGET)/%.o: $(SRC_DIR)/%.$(SRC_EXT)
 run:
 	./$(EXEC_FULL_PATH)
 
+client:
+	@echo "Cleaning $(CLIENT_DIR)/client ...";
+	$(RM) $(CLIENT_DIR)/client
+	@echo "$(CC) $(CLIENT_FLAGS) -o $(CLIENT_DIR)/client $(CLIENT_DIR)/client.cpp";
+	$(CC) $(CLIENT_FLAGS) -o $(CLIENT_DIR)/client $(CLIENT_DIR)/client.cpp 
+	./$(CLIENT_DIR)/client "Hello kitty"
+	
 debug:
 	@echo "SRC_FULL_PATH_LIST $(SRC_FULL_PATH_LIST)"
 	@echo "O_FILE_FULL_PATH_LIST $(O_FILE_FULL_PATH_LIST)"
@@ -69,4 +80,4 @@ clean:
 hardclean:
 	@echo "Cleaning $(EXEC_FULL_PATH) and $(BUILD_TARGET)/* ..."; $(RM) -r $(BUILD_TARGET)/* $(EXEC_FULL_PATH)
 
-.PHONY: clean	
+.PHONY: clean	client
