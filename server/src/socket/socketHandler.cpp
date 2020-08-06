@@ -32,10 +32,11 @@ namespace sockethandler{
       exit(EXIT_FAILURE);
     }
     // Enable port reuse
-    if( setsockopt(sock_fd, SOL_SOCKET, SO_REUSEPORT, &enable, sizeof(int)) < 0){
+    /*if( setsockopt(sock_fd, SOL_SOCKET, SO_REUSEPORT, &enable, sizeof(int)) < 0){
       perror("socket SO_REUSEPORT option failed");
       exit(EXIT_FAILURE);
     }
+    */
     // Enable address reuse
     if( setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0){
       perror("socket SO_REUSEADDR option failed");
@@ -89,7 +90,7 @@ namespace sockethandler{
     struct sockaddr_in server_addr;
     // Bind socket to ip address and port
     server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = INADDR_ANY;
+    server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     server_addr.sin_port = htons(constants::kPort);   // convert from little to big endian
 
     // Bind socket (just an int, with an address and a port, so any traffic to that address and port 
