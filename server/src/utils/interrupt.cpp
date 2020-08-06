@@ -7,14 +7,16 @@ namespace utils{
     std::string input;
 
     while(true){
-      thread::PrintSafe("Press\"q\" at anytime to quit!\n");
+      thread::PrintSafe("Press \"q\" at anytime to quit!\n");
+      
       std::getline(std::cin, input);
       // Check if std::cin is still on normal mode
-      utils::InputValidation();
-      if(input == "q"){
+      // (Depreciated delays thread)
+      // utils::InputValidation();
+       
+      // If input ends with "q", exit
+      if(input[input.size()-1] == 'q'){
         return true;
-      }else{
-        thread::PrintSafe("Input: " + input + "\n");
       }
     }
   }
