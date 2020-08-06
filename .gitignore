@@ -4,4 +4,5 @@ bin/*
 !bin/.gitkeep
 build/*
 build/.gitkeep
+client.dSYM
 .DS_Store
