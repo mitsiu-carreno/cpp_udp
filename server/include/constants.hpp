@@ -2,8 +2,8 @@
 #define CONSTANTS_H
 
 namespace constants{
-  int kPort {8080};
-  int kMaxBytesMsg {2048};
+  const int kPort {20777};
+  const int kMaxBytesMsg {2048};
 }
 
 #endif

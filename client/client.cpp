@@ -20,15 +20,15 @@ void Continue(){
 int main(int argc, char* argv[]){
   // argv[0] is program name
   if(argv[1] == NULL){
-    printf("Agregue un string con la dirección del servidor ejemplo ./client/client \"192.168.100.12\" \"8080\" \"Hello kitty\"");
+    printf("Agregue un string con la dirección del servidor ejemplo ./client/client \"192.168.100.12\" \"20777\" \"Hello kitty\"");
     exit(EXIT_FAILURE);
   }
   if(argv[2] == NULL){
-    printf("Agregue un string con el puerto al que se desea acceder ejemplo ./client/client \"192.168.100.12\" \"8080\" \"Hello kitty\"");
+    printf("Agregue un string con el puerto al que se desea acceder ejemplo ./client/client \"192.168.100.12\" \"20777\" \"Hello kitty\"");
     exit(EXIT_FAILURE);
   }
   if(argv[3] == NULL){
-    printf("Agregue un string con el mensaje que desea enviar ejemplo ./client/client \"192.168.100.12\" \"8080\" \"Hello kitty\"");
+    printf("Agregue un string con el mensaje que desea enviar ejemplo ./client/client \"192.168.100.12\" \"20777\" \"Hello kitty\"");
     exit(EXIT_FAILURE);
   }
   //char server_address[] = {argv[1]};

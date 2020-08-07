@@ -133,7 +133,7 @@ namespace sockethandler{
       // addrlen - variable in which size of src_addr structure is returned
       int bytes_in = recvfrom(sock_fd, buffer, constants::kMaxBytesMsg, MSG_WAITALL, reinterpret_cast<struct sockaddr *>(&client_addr), &client_length);
       if(bytes_in == -1){
-        thread::PrintSafe("Error receiving from client\n");
+        thread::PrintSafe("No data received\n");
         continue;
       }
 
@@ -148,7 +148,6 @@ namespace sockethandler{
       // client_addr.sin_addr store ip address as bytes, we turn it into a string "127.0.0.1"
       inet_ntop(AF_INET, &client_addr.sin_addr, client_ip, 256);  
       thread::PrintSafe("Msg received from " + std::string(client_ip) + ":" + std::string(buffer) + "\n");
-
     }   
   
     thread::PrintSafe("Closing socket\n");

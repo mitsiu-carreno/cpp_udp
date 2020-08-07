@@ -64,7 +64,7 @@ client:
 	$(RM) $(CLIENT_DIR)/client
 	@echo "$(CC) $(CLIENT_FLAGS) -o $(CLIENT_DIR)/client $(CLIENT_DIR)/client.cpp";
 	$(CC) $(CLIENT_FLAGS) -o $(CLIENT_DIR)/client $(CLIENT_DIR)/client.cpp 
-	./$(CLIENT_DIR)/client "127.0.0.1" "8080" "Hello kitty"
+	./$(CLIENT_DIR)/client "192.168.100.12" "20777" "Hello kitty"
 	
 debug:
 	@echo "SRC_FULL_PATH_LIST $(SRC_FULL_PATH_LIST)"
